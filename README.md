@@ -1,3 +1,5 @@
+repo for future code, for no use
+
 # xss-fl-
 
 ## Flask гостевая книга (XSS-safe)
