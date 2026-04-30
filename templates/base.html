@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Гостевая книга{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="container">
+        <div class="brand">
+          <div class="brand__title">Гостевая книга</div>
+          <div class="brand__subtitle">Демонстрация защиты от XSS</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flashes" role="status" aria-live="polite">
+            {% for category, message in messages %}
+              <div class="flash flash--{{ category|e }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="muted">
+          Подсказка: попробуйте ввести <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> — оно будет
+          сохранено/показано как безопасный текст.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

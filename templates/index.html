@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="card">
+    <h1 class="h1">Оставить запись</h1>
+
+    <form class="form" method="post" action="{{ url_for('sign') }}">
+      {{ form.csrf_token }}
+
+      <div class="field">
+        <label class="label" for="{{ form.name.id }}">{{ form.name.label.text }}</label>
+        {{ form.name(class_="input", placeholder="Например: Артём") }}
+        {% if form.name.errors %}
+          <div class="error">{{ form.name.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="field">
+        <label class="label" for="{{ form.message.id }}">{{ form.message.label.text }}</label>
+        {{ form.message(class_="textarea", placeholder="Ваше сообщение…") }}
+        {% if form.message.errors %}
+          <div class="error">{{ form.message.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="submit">Добавить</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2 class="h2">Записи</h2>
+
+    {% if entries %}
+      <div class="entries">
+        {% for e in entries %}
+          <article class="entry">
+            <div class="entry__meta">
+              <span class="entry__name">{{ e["name"] }}</span>
+              <time class="entry__time" datetime="{{ e['created_at']|e }}">{{ e["created_at"] }}</time>
+            </div>
+            <div class="entry__message">{{ e["message"] }}</div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="muted">Пока нет ни одной записи.</div>
+    {% endif %}
+
+    {% if config.get("ENV") == "development" and (cycler is not none) %}
+      {# noop: keeps template deterministic, no scripts #}
+    {% endif %}
+  </section>
+{% endblock %}
